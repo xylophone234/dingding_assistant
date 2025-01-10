@@ -4,12 +4,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
+    namespace 'com.example.autopunch'
+    compileSdk 33
     
     defaultConfig {
         applicationId "com.example.autopunch"
-        minSdkVersion 24
-        targetSdkVersion 33
+        minSdk 24
+        targetSdk 33
         versionCode 1
         versionName "1.0"
     }
@@ -32,7 +33,6 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.6.10"
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
