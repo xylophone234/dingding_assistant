@@ -2,17 +2,46 @@ tasks:
   - name: Setup Android SDK
     init: |
       sudo apt-get update
-      sudo apt-get install -y openjdk-11-jdk
-      mkdir -p android-sdk
-      wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
-      unzip commandlinetools-linux-8512546_latest.zip
-      mkdir -p android-sdk/cmdline-tools/latest
-      mv cmdline-tools/* android-sdk/cmdline-tools/latest/
-      export ANDROID_HOME=$WORKSPACE_ROOT/android-sdk
+      sudo apt-get install -y openjdk-11-jdk unzip
+      
+      # 创建并进入工作目录
+      mkdir -p /workspace/android-sdk
+      cd /workspace/android-sdk
+      
+      # 下载和设置 Android SDK
+      wget -q https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
+      unzip -q commandlinetools-linux-8512546_latest.zip
+      mkdir -p cmdline-tools/latest
+      mv cmdline-tools/* cmdline-tools/latest/ || true
+      
+      # 设置环境变量
+      export ANDROID_HOME=/workspace/android-sdk
       export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
-      yes | sdkmanager --licenses
-      sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+      
+      # 返回项目目录
+      cd /workspace/dingding_assistant
+      
+      # 创建 gradlew 文件
+      echo '#!/bin/sh
+      exec java -Xmx64m -Dorg.gradle.appname=gradlew -classpath `dirname $0`/gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain "$@"' > gradlew
       chmod +x gradlew
+      
+      # 创建 gradle wrapper jar
+      mkdir -p gradle/wrapper
+      wget -q https://raw.githubusercontent.com/gradle/gradle/v7.0.2/gradle/wrapper/gradle-wrapper.jar -O gradle/wrapper/gradle-wrapper.jar
+      
+      # 创建 gradle-wrapper.properties
+      echo 'distributionBase=GRADLE_USER_HOME
+      distributionPath=wrapper/dists
+      distributionUrl=https\://services.gradle.org/distributions/gradle-7.4.2-bin.zip
+      zipStoreBase=GRADLE_USER_HOME
+      zipStorePath=wrapper/dists' > gradle/wrapper/gradle-wrapper.properties
+      
+      # 接受许可并安装 SDK 组件
+      yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+      $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+      
+      # 构建项目
       ./gradlew assembleDebug
     command: |
       echo "APK built successfully!"
