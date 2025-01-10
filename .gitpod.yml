@@ -1,0 +1,13 @@
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+  - init: |
+      chmod +x gradlew
+      ./gradlew assembleDebug
+    command: |
+      echo "APK built successfully!"
+
+ports:
+  - port: 8080
+    onOpen: ignore 
