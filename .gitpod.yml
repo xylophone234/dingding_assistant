@@ -1,8 +1,17 @@
-image:
-  file: .gitpod.Dockerfile
-
 tasks:
-  - init: |
+  - name: Setup Android SDK
+    init: |
+      sudo apt-get update
+      sudo apt-get install -y openjdk-11-jdk
+      mkdir -p android-sdk
+      wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
+      unzip commandlinetools-linux-8512546_latest.zip
+      mkdir -p android-sdk/cmdline-tools/latest
+      mv cmdline-tools/* android-sdk/cmdline-tools/latest/
+      export ANDROID_HOME=$WORKSPACE_ROOT/android-sdk
+      export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+      yes | sdkmanager --licenses
+      sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
       chmod +x gradlew
       ./gradlew assembleDebug
     command: |
@@ -10,4 +19,9 @@ tasks:
 
 ports:
   - port: 8080
-    onOpen: ignore 
+    onOpen: ignore
+
+vscode:
+  extensions:
+    - vscjava.vscode-java-pack
+    - redhat.java 
