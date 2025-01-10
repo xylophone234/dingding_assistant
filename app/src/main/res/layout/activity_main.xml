@@ -26,20 +26,4 @@
         android:layout_marginTop="16dp"
         android:text="设置打卡时间" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="服务状态："
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/statusText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="运行中"
-        android:textColor="#4CAF50"
-        android:textSize="20sp" />
-
 </LinearLayout> 
